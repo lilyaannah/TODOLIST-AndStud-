@@ -3,7 +3,13 @@ package com.example.todolist.model;
 public class ToDoModel {
 
     private String task;
+    private String description;
     private int id , status;
+
+    public String getDescription(){ return description; }
+    public void setDescription (String description){
+        this.description = description;
+    }
 
     public String getTask() {
         return task;

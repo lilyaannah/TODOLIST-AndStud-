@@ -10,11 +10,19 @@
         android:paddingStart="7dp"
         android:hint="Enter New Task"
         android:paddingEnd="7dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edittextDescription"
+        android:paddingStart="7dp"
+        android:layout_below="@id/edittext"
+        android:hint="Enter description"
+        android:paddingEnd="7dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_below="@id/edittext"
+        android:layout_below="@id/edittextDescription"
         android:text="Save"
         android:layout_alignParentEnd="true"
         android:id="@+id/button_save"

@@ -25,6 +25,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
 
     //widgets
     private EditText mEditText;
+    private EditText mEditTextDescription;
     private Button mSaveButton;
 
     private DataBaseHelper myDb;
@@ -33,6 +34,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
         return new AddNewTask();
     }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // добавить условие что задача !=0, а описание может быть =0
 
     @Nullable
     @Override
@@ -46,6 +49,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mEditText = view.findViewById(R.id.edittext);
+        mEditTextDescription=view.findViewById(R.id.edittextDescription);
         mSaveButton = view.findViewById(R.id.button_save);
 
         myDb = new DataBaseHelper(getActivity());
@@ -56,51 +60,55 @@ public class AddNewTask extends BottomSheetDialogFragment {
         if (bundle != null){
             isUpdate = true;
             String task = bundle.getString("task");
+            String description=bundle.getString("description");
             mEditText.setText(task);
+            mEditTextDescription.setText(description);
 
             if (task.length() > 0 ){
                 mSaveButton.setEnabled(false);
             }
 
         }
-        mEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().equals("")){
+                if (mEditText.getText().toString().isEmpty() && mEditTextDescription.getText().toString().isEmpty()) {
                     mSaveButton.setEnabled(false);
                     mSaveButton.setBackgroundColor(Color.GRAY);
-                }else{
+                } else {
                     mSaveButton.setEnabled(true);
                     mSaveButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) {}
+        };
 
-            }
-        });
+        mEditText.addTextChangedListener(textWatcher);
+        mEditTextDescription.addTextChangedListener(textWatcher);
+
         final boolean finalIsUpdate = isUpdate;
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text = mEditText.getText().toString();
+                String descriptionText = mEditTextDescription.getText().toString();
 
-                if (finalIsUpdate){
-                    myDb.updateTask(bundle.getInt("id") , text);
-                }else{
+                if (finalIsUpdate) {
+                    myDb.updateTask(bundle.getInt("id"), text, descriptionText);
+                } else {
                     ToDoModel item = new ToDoModel();
                     item.setTask(text);
+                    item.setDescription(descriptionText);
                     item.setStatus(0);
                     myDb.insertTask(item);
                 }
                 dismiss();
-
             }
         });
     }
@@ -113,4 +121,35 @@ public class AddNewTask extends BottomSheetDialogFragment {
             ((OnDialogCloseListner)activity).onDialogClose(dialog);
         }
     }
+
+    /////
+//    @Override
+//    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        // Сохраняем текущее состояние полей ввода
+//        outState.putString("task", mEditText.getText().toString());
+//        outState.putString("description", mEditTextDescription.getText().toString());
+//    }
+//
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
+//        if (savedInstanceState != null) {
+//            // Восстанавливаем данные из сохраненного состояния
+//            String savedTask = savedInstanceState.getString("task");
+//            String savedDescription = savedInstanceState.getString("description");
+//
+//            mEditText.setText(savedTask);
+//            mEditTextDescription.setText(savedDescription);
+//
+//            // Проверяем, если оба поля пустые, отключаем кнопку
+//            if (savedTask != null && !savedTask.isEmpty() || savedDescription != null && !savedDescription.isEmpty()) {
+//                mSaveButton.setEnabled(true);
+//                mSaveButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//            } else {
+//                mSaveButton.setEnabled(false);
+//                mSaveButton.setBackgroundColor(Color.GRAY);
+//            }
+//        }
+//    }
 }

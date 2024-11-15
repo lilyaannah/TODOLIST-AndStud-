@@ -20,6 +20,14 @@
             android:id="@+id/mcheckbox"
             android:text="This is Task 1"
             android:paddingStart="8dp"/>
+        <TextView
+            android:id="@+id/taskDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This is the description of the task."
+            android:textColor="@android:color/darker_gray"
+            android:paddingStart="40dp"
+            android:paddingTop="38dp"/>
     </RelativeLayout>
 
 

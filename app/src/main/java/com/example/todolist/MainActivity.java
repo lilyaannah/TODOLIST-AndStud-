@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,8 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.example.todolist.adapter.ToDoAdapter;
 import com.example.todolist.model.ToDoModel;
 import com.example.todolist.util.DataBaseHelper;
@@ -28,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Удаляем старую базу данных
+        // deleteDatabase("TODO_DATABASE");  // Замените "TODO_DATABASE" на название вашей базы
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -61,5 +71,26 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
         Collections.reverse(mList);
         adapter.setTasks(mList);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("taskTitle", "To Do Tasks"); // Пример сохранения данных
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            String taskTitle = savedInstanceState.getString("taskTitle");
+            TextView textView = findViewById(R.id.textview);
+            textView.setText(taskTitle);
+        }
+    }
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Обработайте изменение конфигурации, если необходимо
     }
 }

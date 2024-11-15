@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +43,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final ToDoModel item = mList.get(position);
         holder.mCheckBox.setText(item.getTask());
+        holder.mTaskDescriptionView.setText(item.getDescription());
         holder.mCheckBox.setChecked(toBoolean(item.getStatus()));
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -80,6 +82,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
         Bundle bundle = new Bundle();
         bundle.putInt("id" , item.getId());
         bundle.putString("task" , item.getTask());
+        bundle.putString("description", item.getDescription());
 
         AddNewTask task = new AddNewTask();
         task.setArguments(bundle);
@@ -95,9 +98,11 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         CheckBox mCheckBox;
+        TextView mTaskDescriptionView;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mCheckBox = itemView.findViewById(R.id.mcheckbox);
+            mTaskDescriptionView = itemView.findViewById(R.id.taskDescription);
         }
     }
 }
