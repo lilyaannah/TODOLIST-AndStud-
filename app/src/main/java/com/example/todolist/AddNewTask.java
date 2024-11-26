@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,6 @@ public class AddNewTask extends BottomSheetDialogFragment {
     public static AddNewTask newInstance(){
         return new AddNewTask();
     }
-
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // добавить условие что задача !=0, а описание может быть =0
 
     @Nullable
     @Override
@@ -76,7 +74,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (mEditText.getText().toString().isEmpty() && mEditTextDescription.getText().toString().isEmpty()) {
+                if ((mEditText.getText().toString().isEmpty() && mEditTextDescription.getText().toString().isEmpty()) ||
+                        mEditText.getText().toString().trim().isEmpty()) {
                     mSaveButton.setEnabled(false);
                     mSaveButton.setBackgroundColor(Color.GRAY);
                 } else {
@@ -120,6 +119,12 @@ public class AddNewTask extends BottomSheetDialogFragment {
         if (activity instanceof OnDialogCloseListner){
             ((OnDialogCloseListner)activity).onDialogClose(dialog);
         }
+    }
+
+    // Метод для проверки наличия недопустимых символов
+    private boolean containsInvalidCharacters(String text) {
+        // Проверяем, есть ли пробелы или буквы
+        return text.matches(".*[a-zA-Z\\s].*");
     }
 
     /////
