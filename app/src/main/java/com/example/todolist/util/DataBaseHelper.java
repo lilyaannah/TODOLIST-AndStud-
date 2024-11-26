@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-
+    private Context context;
     private SQLiteDatabase db;
 
     private static  final String DATABASE_NAME = "TODO_DATABASE";
@@ -31,6 +32,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         super(context, DATABASE_NAME, null, 1);
         Log.d("DatabaseHelper", "Database Helper initialized.");
+        this.context = context;  // Сохраняем контекст для использования в методах
     }
 
     @Override
@@ -49,6 +51,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public void insertTask(ToDoModel model){
+        String task = model.getTask().trim();
+        if (task.isEmpty()) {
+            Toast.makeText(context, "Task name cannot be empty.", Toast.LENGTH_SHORT).show();
+
+            // Логируем ошибку
+            Log.i("DatabaseHelper", "Task name cannot be empty.");
+
+            // Прерываем выполнение метода, если задача пустая
+            return;
+        }
+
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_2 , model.getTask());

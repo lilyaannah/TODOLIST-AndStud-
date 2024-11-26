@@ -74,8 +74,9 @@ public class AddNewTask extends BottomSheetDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if ((mEditText.getText().toString().isEmpty() && mEditTextDescription.getText().toString().isEmpty()) ||
-                        mEditText.getText().toString().trim().isEmpty()) {
+                if ((mEditText.getText().toString().isEmpty() && mEditTextDescription.getText().toString().isEmpty())
+                        // || mEditText.getText().toString().trim().isEmpty()
+                ) {
                     mSaveButton.setEnabled(false);
                     mSaveButton.setBackgroundColor(Color.GRAY);
                 } else {
